@@ -19,6 +19,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+#include <memory/vaddr.h>
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -76,6 +78,21 @@ static int cmd_info(char *args) {
 	return 0;
 }
 
+static int cmd_x(char *args) {
+	char *N = strtok(NULL, " ");
+	char *EXPR = strtok(NULL, " ");
+	int len;
+	vaddr_t address;
+	sscanf(N, "%d", &len);
+	sscanf(EXPR, "%x", &address);
+	for(int i = 0; i < len; i++) {
+		printf("0x%x:",address);
+		printf("%08x\n",vaddr_read(address,4));
+		address += 4;
+	}
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -89,7 +106,8 @@ static struct {
 
   /* TODO: Add more commands */
 	{ "si", "Single-step exection", cmd_si},
-	{ "info", "Registor detailed infomation", cmd_info}
+	{ "info", "Registor detailed infomation", cmd_info},
+	{ "x", "Scan memory", cmd_x}
 };
 
 #define NR_CMD ARRLEN(cmd_table)
