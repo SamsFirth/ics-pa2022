@@ -68,6 +68,14 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
+static int cmd_info(char *args) {
+	char *arg = strtok(NULL, " ");
+	if(strcmp(arg, "r") == 0) {
+		isa_reg_display();
+	}
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -80,7 +88,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-	{ "si", "Single-step exection", cmd_si}
+	{ "si", "Single-step exection", cmd_si},
+	{ "info", "Registor detailed infomation", cmd_info}
 };
 
 #define NR_CMD ARRLEN(cmd_table)
